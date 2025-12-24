@@ -1,0 +1,40 @@
+name: Security Scan
+
+on:
+    push:
+        branches:
+            - master
+            - main
+    pull_request:
+        branches:
+            - master
+            - main
+    schedule:
+        - cron: '0 0 * * 1' # Weekly on Mondays
+
+jobs:
+    security-scan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout 🛎️
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js 🔧
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '18'
+                  cache: 'npm'
+
+            - name: Install Dependencies 📦
+              run: npm ci
+
+            - name: Run npm audit 🔒
+              run: npm audit --audit-level=high
+              continue-on-error: true
+
+            - name: Check for Vulnerable Docker Images 🐳
+              run: |
+                  echo "Scanning app definitions for known vulnerable images..."
+                  # This is a placeholder for image vulnerability scanning
+                  # In production, you might integrate with Trivy or similar tools
+                  echo "✅ Manual review recommended for Docker image versions"

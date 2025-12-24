@@ -1,4 +1,17 @@
 /*jshint esversion: 6 */
+/**
+ * CapRover One-Click Apps Builder
+ * 
+ * This script builds the distribution files from v4 app definitions.
+ * It processes YAML files and generates JSON files for different API versions.
+ * 
+ * Output structure:
+ * - dist/v2: Legacy v2 format
+ * - dist/v3: v3 format  
+ * - dist/v4: v4 format with full app definitions
+ * 
+ * @author CapRover Contributors
+ */
 const path = require('path');
 const yaml = require('yaml');
 const fs = require('fs-extra');
@@ -180,7 +193,10 @@ function buildDist() {
             fs.outputJsonSync(path.join(pathOfDistV4, 'list'), v3List);
         })
         .then(function () {
-            return fs.copySync(path.join(pathOfPublic, 'CNAME'), path.join(pathOfDist, 'CNAME'));
+            const cnamePath = path.join(pathOfPublic, 'CNAME');
+            if (fs.existsSync(cnamePath)) {
+                return fs.copySync(cnamePath, path.join(pathOfDist, 'CNAME'));
+            }
         });
 }
 

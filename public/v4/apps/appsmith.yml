@@ -1,0 +1,31 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: appsmith/appsmith-ce:$$cap_appsmith_version
+        volumes:
+            - $$cap_appname-data:/appsmith-stacks
+        restart: always
+        environment:
+            APPSMITH_ENCRYPTION_PASSWORD: $$cap_encryption_password
+            APPSMITH_ENCRYPTION_SALT: $$cap_encryption_salt
+        caproverExtra:
+            containerHttpPort: 80
+caproverOneClickApp:
+    variables:
+        - id: $$cap_appsmith_version
+          label: Appsmith Version
+          defaultValue: v1.10.5
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/appsmith/appsmith-ce/tags
+          validRegex: /.{1,}/
+        - id: $$cap_encryption_password
+          label: Encryption Password
+          description: Password for encrypting sensitive data (keep this secure)
+        - id: $$cap_encryption_salt
+          label: Encryption Salt
+          description: Salt for encryption (random string)
+    instructions:
+        start: Deploying Appsmith low-code platform.
+        end: Appsmith has been deployed! Access it at http://$$cap_appname.$$cap_root_domain and create your admin account. First startup may take a few minutes.
+    displayName: Appsmith
+    isOfficial: false
+    description: Open-source low-code platform. Build internal tools and dashboards with drag-and-drop UI and connect to any database or API.

@@ -1,0 +1,27 @@
+name: Dependency Update Check
+
+on:
+    schedule:
+        - cron: '0 0 * * 0' # Weekly on Sundays
+    workflow_dispatch: # Allow manual triggering
+
+jobs:
+    check-dependencies:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout 🛎️
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js 🔧
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '18'
+                  cache: 'npm'
+
+            - name: Check for Outdated Dependencies 📦
+              run: |
+                  npm outdated || true
+
+            - name: Run npm audit 🔒
+              run: |
+                  npm audit --audit-level=moderate || true

@@ -1,0 +1,20 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: mailhog/mailhog:$$cap_mailhog_version
+        restart: always
+        caproverExtra:
+            containerHttpPort: 8025
+caproverOneClickApp:
+    variables:
+        - id: $$cap_mailhog_version
+          label: MailHog Version
+          defaultValue: v1.0.1
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/mailhog/mailhog/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying MailHog email testing tool.
+        end: MailHog has been deployed! Access the web UI at http://$$cap_appname.$$cap_root_domain. Configure your apps to send emails to $$cap_appname:1025.
+    displayName: MailHog
+    isOfficial: false
+    description: Email testing tool for developers. Catch emails sent from your applications and view them in a web interface.

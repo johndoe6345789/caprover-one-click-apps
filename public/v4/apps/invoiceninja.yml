@@ -1,0 +1,53 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: invoiceninja/invoiceninja:$$cap_invoiceninja_version
+        volumes:
+            - $$cap_appname-public:/var/www/app/public
+            - $$cap_appname-storage:/var/www/app/storage
+        restart: always
+        environment:
+            APP_URL: http://$$cap_appname.$$cap_root_domain
+            APP_KEY: $$cap_app_key
+            DB_HOST: $$cap_appname-db
+            DB_DATABASE: invoiceninja
+            DB_USERNAME: invoiceninja
+            DB_PASSWORD: $$cap_db_password
+        depends_on:
+            - $$cap_appname-db
+        caproverExtra:
+            containerHttpPort: 80
+    $$cap_appname-db:
+        image: mysql:8
+        volumes:
+            - $$cap_appname-db-data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: $$cap_db_root_password
+            MYSQL_DATABASE: invoiceninja
+            MYSQL_USER: invoiceninja
+            MYSQL_PASSWORD: $$cap_db_password
+        caproverExtra:
+            notExposeAsWebApp: true
+caproverOneClickApp:
+    variables:
+        - id: $$cap_invoiceninja_version
+          label: Invoice Ninja Version
+          defaultValue: '5'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/invoiceninja/invoiceninja/tags
+          validRegex: /.{1,}/
+        - id: $$cap_app_key
+          label: App Key
+          description: Application key (base64:random32chars)
+        - id: $$cap_db_password
+          label: Database Password
+          description: MySQL password for Invoice Ninja
+        - id: $$cap_db_root_password
+          label: Database Root Password
+          description: MySQL root password
+    instructions:
+        start: Deploying Invoice Ninja invoicing and billing platform.
+        end: Invoice Ninja has been deployed! Access it at http://$$cap_appname.$$cap_root_domain and complete the setup wizard.
+    displayName: Invoice Ninja
+    isOfficial: false
+    description: Free invoicing and billing platform. Create invoices, track payments, manage clients, and accept online payments.

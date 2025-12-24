@@ -1,0 +1,38 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: linuxserver/code-server:$$cap_codeserver_version
+        volumes:
+            - $$cap_appname-config:/config
+        restart: always
+        environment:
+            PUID: 1000
+            PGID: 1000
+            TZ: $$cap_timezone
+            PASSWORD: $$cap_password
+            SUDO_PASSWORD: $$cap_sudo_password
+        caproverExtra:
+            containerHttpPort: 8443
+caproverOneClickApp:
+    variables:
+        - id: $$cap_codeserver_version
+          label: Code Server Version
+          defaultValue: 'latest'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/linuxserver/code-server/tags
+          validRegex: /.{1,}/
+        - id: $$cap_password
+          label: Password
+          description: Password to access code-server
+        - id: $$cap_sudo_password
+          label: Sudo Password
+          description: Password for sudo commands within code-server
+        - id: $$cap_timezone
+          label: Timezone
+          defaultValue: 'UTC'
+          description: Timezone (e.g., America/New_York, Europe/London)
+    instructions:
+        start: Deploying Code Server - VS Code in the browser.
+        end: Code Server has been deployed! Access VS Code at http://$$cap_appname.$$cap_root_domain using your password.
+    displayName: Code Server
+    isOfficial: false
+    description: VS Code running on a remote server. Access your development environment from any device through your browser.

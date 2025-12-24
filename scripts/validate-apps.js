@@ -1,4 +1,19 @@
  /*jshint esversion: 6 */
+/**
+ * CapRover One-Click Apps Validator
+ * 
+ * This script validates all one-click app definitions to ensure they meet
+ * the required standards before deployment.
+ * 
+ * Validation checks:
+ * - All files must be in YAML format (.yml extension)
+ * - CapRover version must match the directory version
+ * - All required fields must be present (description, instructions, services)
+ * - Description must be under 200 characters
+ * - Logo file must exist for each app
+ * 
+ * @author CapRover Contributors
+ */
  const path = require('path');
  const yaml = require('yaml');
  const fs = require('fs-extra');

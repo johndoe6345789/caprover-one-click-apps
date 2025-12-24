@@ -1,0 +1,42 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: hasura/graphql-engine:$$cap_hasura_version
+        depends_on:
+            - $$cap_appname-db
+        restart: always
+        environment:
+            HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:$$cap_db_password@$$cap_appname-db:5432/postgres
+            HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+            HASURA_GRAPHQL_ADMIN_SECRET: $$cap_admin_secret
+            HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+        caproverExtra:
+            containerHttpPort: 8080
+    $$cap_appname-db:
+        image: postgres:15
+        volumes:
+            - $$cap_appname-db-data:/var/lib/postgresql/data
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: $$cap_db_password
+        caproverExtra:
+            notExposeAsWebApp: true
+caproverOneClickApp:
+    variables:
+        - id: $$cap_hasura_version
+          label: Hasura Version
+          defaultValue: v2.36.0
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/hasura/graphql-engine/tags
+          validRegex: /.{1,}/
+        - id: $$cap_db_password
+          label: Database Password
+          description: PostgreSQL password
+        - id: $$cap_admin_secret
+          label: Admin Secret
+          description: Admin secret key for Hasura Console
+    instructions:
+        start: Deploying Hasura GraphQL Engine with PostgreSQL.
+        end: Hasura has been deployed! Access the console at http://$$cap_appname.$$cap_root_domain using your admin secret.
+    displayName: Hasura GraphQL Engine
+    isOfficial: false
+    description: Instant GraphQL APIs on your databases. Connect to PostgreSQL, MySQL, and more to get production-ready GraphQL APIs.
