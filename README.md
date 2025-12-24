@@ -27,7 +27,7 @@ This repository contains one-click app definitions for CapRover, making it incre
 
 ## 📦 Available Apps
 
-We currently have **68+ apps** available, including:
+We currently have **118+ apps** available, including:
 
 ### Databases
 - PostgreSQL, MySQL, MariaDB, MongoDB
