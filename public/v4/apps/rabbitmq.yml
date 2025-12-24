@@ -1,0 +1,32 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: rabbitmq:$$cap_rabbitmq_version
+        volumes:
+            - $$cap_appname-data:/var/lib/rabbitmq
+        restart: always
+        environment:
+            RABBITMQ_DEFAULT_USER: $$cap_user
+            RABBITMQ_DEFAULT_PASS: $$cap_password
+        caproverExtra:
+            containerHttpPort: 15672
+caproverOneClickApp:
+    variables:
+        - id: $$cap_rabbitmq_version
+          label: RabbitMQ Version
+          defaultValue: 3.12-management
+          description: Check out their Docker page for the valid tags https://hub.docker.com/_/rabbitmq/tags
+          validRegex: /.{1,}/
+        - id: $$cap_user
+          label: Username
+          defaultValue: admin
+          description: RabbitMQ admin username.
+        - id: $$cap_password
+          label: Password
+          description: RabbitMQ admin password.
+    instructions:
+        start: Deploying RabbitMQ message broker.
+        end: RabbitMQ has been deployed! Visit http://$$cap_appname.$$cap_root_domain to access the management interface.
+    displayName: RabbitMQ
+    isOfficial: false
+    description: Message broker implementing AMQP. Facilitates communication between distributed applications with message queuing.

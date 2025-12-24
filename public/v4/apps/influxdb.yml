@@ -1,0 +1,47 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: influxdb:$$cap_influxdb_version
+        volumes:
+            - $$cap_appname-data:/var/lib/influxdb2
+        restart: always
+        environment:
+            DOCKER_INFLUXDB_INIT_MODE: setup
+            DOCKER_INFLUXDB_INIT_USERNAME: $$cap_admin_user
+            DOCKER_INFLUXDB_INIT_PASSWORD: $$cap_admin_password
+            DOCKER_INFLUXDB_INIT_ORG: $$cap_org_name
+            DOCKER_INFLUXDB_INIT_BUCKET: $$cap_bucket_name
+            DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: $$cap_admin_token
+        caproverExtra:
+            containerHttpPort: 8086
+caproverOneClickApp:
+    variables:
+        - id: $$cap_influxdb_version
+          label: InfluxDB Version
+          defaultValue: '2.7'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/_/influxdb/tags
+          validRegex: /.{1,}/
+        - id: $$cap_admin_user
+          label: Admin Username
+          defaultValue: admin
+          description: Initial admin username.
+        - id: $$cap_admin_password
+          label: Admin Password
+          description: Initial admin password (minimum 8 characters).
+        - id: $$cap_org_name
+          label: Organization Name
+          defaultValue: myorg
+          description: Initial organization name.
+        - id: $$cap_bucket_name
+          label: Bucket Name
+          defaultValue: mybucket
+          description: Initial bucket name.
+        - id: $$cap_admin_token
+          label: Admin Token
+          description: Initial admin token for API access.
+    instructions:
+        start: Deploying InfluxDB time series database.
+        end: InfluxDB has been deployed! Visit http://$$cap_appname.$$cap_root_domain to access the UI.
+    displayName: InfluxDB
+    isOfficial: false
+    description: Time series database built specifically for metrics and events. Optimized for time-stamped data with built-in HTTP API.

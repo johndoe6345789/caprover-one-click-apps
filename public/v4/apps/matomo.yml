@@ -1,0 +1,48 @@
+captainVersion: 4
+services:
+    $$cap_appname-db:
+        image: mariadb:$$cap_mariadb_version
+        volumes:
+            - $$cap_appname-db-data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: $$cap_db_root_password
+            MYSQL_DATABASE: matomo
+            MYSQL_USER: matomo
+            MYSQL_PASSWORD: $$cap_db_password
+    $$cap_appname:
+        image: matomo:$$cap_matomo_version
+        volumes:
+            - $$cap_appname-data:/var/www/html
+        restart: always
+        environment:
+            MATOMO_DATABASE_HOST: $$cap_appname-db
+            MATOMO_DATABASE_ADAPTER: mysql
+            MATOMO_DATABASE_TABLES_PREFIX: matomo_
+            MATOMO_DATABASE_USERNAME: matomo
+            MATOMO_DATABASE_PASSWORD: $$cap_db_password
+            MATOMO_DATABASE_DBNAME: matomo
+        depends_on:
+            - $$cap_appname-db
+        caproverExtra:
+            containerHttpPort: 80
+caproverOneClickApp:
+    variables:
+        - id: $$cap_matomo_version
+          label: Matomo Version
+          defaultValue: '5.0'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/_/matomo/tags
+          validRegex: /.{1,}/
+        - id: $$cap_mariadb_version
+          label: MariaDB Version
+          defaultValue: '11.2'
+        - id: $$cap_db_root_password
+          label: Database Root Password
+        - id: $$cap_db_password
+          label: Database Password
+    instructions:
+        start: Deploying Matomo web analytics platform.
+        end: Matomo has been deployed! Visit http://$$cap_appname.$$cap_root_domain to complete the installation wizard.
+    displayName: Matomo
+    isOfficial: false
+    description: Web analytics platform. Privacy-focused alternative to Google Analytics with full data ownership and GDPR compliance.

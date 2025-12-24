@@ -1,0 +1,47 @@
+captainVersion: 4
+services:
+    $$cap_appname-db:
+        image: mariadb:$$cap_mariadb_version
+        volumes:
+            - $$cap_appname-db-data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: $$cap_db_root_password
+            MYSQL_LOG_CONSOLE: 'true'
+    $$cap_appname:
+        image: seafileltd/seafile-mc:$$cap_seafile_version
+        volumes:
+            - $$cap_appname-data:/shared
+        restart: always
+        environment:
+            DB_HOST: $$cap_appname-db
+            DB_ROOT_PASSWD: $$cap_db_root_password
+            SEAFILE_ADMIN_EMAIL: $$cap_admin_email
+            SEAFILE_ADMIN_PASSWORD: $$cap_admin_password
+            SEAFILE_SERVER_HOSTNAME: $$cap_appname.$$cap_root_domain
+        depends_on:
+            - $$cap_appname-db
+        caproverExtra:
+            containerHttpPort: 80
+caproverOneClickApp:
+    variables:
+        - id: $$cap_seafile_version
+          label: Seafile Version
+          defaultValue: '11.0'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/seafileltd/seafile-mc/tags
+          validRegex: /.{1,}/
+        - id: $$cap_mariadb_version
+          label: MariaDB Version
+          defaultValue: '11.2'
+        - id: $$cap_db_root_password
+          label: Database Root Password
+        - id: $$cap_admin_email
+          label: Admin Email
+        - id: $$cap_admin_password
+          label: Admin Password
+    instructions:
+        start: Deploying Seafile file syncing and sharing platform.
+        end: Seafile has been deployed! Visit http://$$cap_appname.$$cap_root_domain to login with your admin credentials.
+    displayName: Seafile
+    isOfficial: false
+    description: File syncing and sharing platform. Enterprise file sync and share with encryption, version control, and collaboration.

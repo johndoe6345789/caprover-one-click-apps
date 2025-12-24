@@ -1,0 +1,22 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: getgrav/grav:$$cap_grav_version
+        volumes:
+            - $$cap_appname-data:/var/www/grav
+        restart: always
+        caproverExtra:
+            containerHttpPort: 80
+caproverOneClickApp:
+    variables:
+        - id: $$cap_grav_version
+          label: Grav Version
+          defaultValue: '1.7'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/getgrav/grav/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Grav flat-file CMS.
+        end: Grav has been deployed! Visit http://$$cap_appname.$$cap_root_domain to access your site. Install the Admin plugin for management UI.
+    displayName: Grav
+    isOfficial: false
+    description: Modern flat-file CMS. Fast, simple, and flexible file-based platform with no database required.

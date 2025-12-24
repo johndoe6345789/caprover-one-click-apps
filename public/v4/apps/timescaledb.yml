@@ -1,0 +1,35 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: timescale/timescaledb:$$cap_timescaledb_version
+        volumes:
+            - $$cap_appname-data:/var/lib/postgresql/data
+        restart: always
+        environment:
+            POSTGRES_DB: $$cap_db_name
+            POSTGRES_USER: $$cap_db_user
+            POSTGRES_PASSWORD: $$cap_db_password
+        caproverExtra:
+            notExposeAsWebApp: true
+caproverOneClickApp:
+    variables:
+        - id: $$cap_timescaledb_version
+          label: TimescaleDB Version
+          defaultValue: latest-pg16
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/timescale/timescaledb/tags
+          validRegex: /.{1,}/
+        - id: $$cap_db_name
+          label: Database Name
+          defaultValue: postgres
+        - id: $$cap_db_user
+          label: Database User
+          defaultValue: postgres
+        - id: $$cap_db_password
+          label: Database Password
+          description: Database password.
+    instructions:
+        start: Deploying TimescaleDB time series database.
+        end: TimescaleDB has been deployed! Connect using the provided credentials on port 5432.
+    displayName: TimescaleDB
+    isOfficial: false
+    description: Time series database built on PostgreSQL. Combines the reliability of PostgreSQL with specialized time-series optimizations.

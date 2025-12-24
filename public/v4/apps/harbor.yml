@@ -1,0 +1,55 @@
+captainVersion: 4
+services:
+    $$cap_appname-db:
+        image: postgres:$$cap_postgres_version
+        volumes:
+            - $$cap_appname-db-data:/var/lib/postgresql/data
+        restart: always
+        environment:
+            POSTGRES_DB: registry
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: $$cap_db_password
+    $$cap_appname-redis:
+        image: redis:$$cap_redis_version
+        restart: always
+    $$cap_appname:
+        image: goharbor/harbor-core:$$cap_harbor_version
+        volumes:
+            - $$cap_appname-data:/storage
+        restart: always
+        environment:
+            DATABASE_TYPE: postgresql
+            POSTGRESQL_HOST: $$cap_appname-db
+            POSTGRESQL_PORT: '5432'
+            POSTGRESQL_DATABASE: registry
+            POSTGRESQL_USERNAME: postgres
+            POSTGRESQL_PASSWORD: $$cap_db_password
+            REDIS_HOST: $$cap_appname-redis
+            REDIS_PORT: '6379'
+        depends_on:
+            - $$cap_appname-db
+            - $$cap_appname-redis
+        caproverExtra:
+            containerHttpPort: 8080
+caproverOneClickApp:
+    variables:
+        - id: $$cap_harbor_version
+          label: Harbor Version
+          defaultValue: v2.10.0
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/goharbor/harbor-core/tags
+          validRegex: /.{1,}/
+        - id: $$cap_postgres_version
+          label: PostgreSQL Version
+          defaultValue: '15'
+        - id: $$cap_redis_version
+          label: Redis Version
+          defaultValue: '7'
+        - id: $$cap_db_password
+          label: Database Password
+          description: Password for the Harbor database.
+    instructions:
+        start: Deploying Harbor container registry.
+        end: Harbor has been deployed! Visit http://$$cap_appname.$$cap_root_domain to access the registry.
+    displayName: Harbor
+    isOfficial: false
+    description: Cloud-native container registry that stores, signs, and scans content. Harbor extends Docker Distribution with security and management features.

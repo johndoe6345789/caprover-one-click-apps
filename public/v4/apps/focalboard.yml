@@ -1,0 +1,24 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: mattermost/focalboard:$$cap_focalboard_version
+        volumes:
+            - $$cap_appname-data:/data
+        restart: always
+        environment:
+            FOCALBOARD_PORT: '8000'
+        caproverExtra:
+            containerHttpPort: 8000
+caproverOneClickApp:
+    variables:
+        - id: $$cap_focalboard_version
+          label: Focalboard Version
+          defaultValue: '7.11'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/mattermost/focalboard/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Focalboard project management and task tracking.
+        end: Focalboard has been deployed! Visit http://$$cap_appname.$$cap_root_domain to create your account.
+    displayName: Focalboard
+    isOfficial: false
+    description: Project management and task tracking tool. Open-source alternative to Trello, Notion, and Asana with boards, tables, and gallery views.

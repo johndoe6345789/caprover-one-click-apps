@@ -1,0 +1,44 @@
+captainVersion: 4
+services:
+    $$cap_appname-db:
+        image: mysql:$$cap_mysql_version
+        volumes:
+            - $$cap_appname-db-data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: $$cap_db_root_password
+            MYSQL_DATABASE: pydio
+            MYSQL_USER: pydio
+            MYSQL_PASSWORD: $$cap_db_password
+    $$cap_appname:
+        image: pydio/cells:$$cap_pydio_version
+        volumes:
+            - $$cap_appname-data:/var/cells
+        restart: always
+        environment:
+            CELLS_BIND: 0.0.0.0:8080
+            CELLS_EXTERNAL: http://$$cap_appname.$$cap_root_domain
+        depends_on:
+            - $$cap_appname-db
+        caproverExtra:
+            containerHttpPort: 8080
+caproverOneClickApp:
+    variables:
+        - id: $$cap_pydio_version
+          label: Pydio Version
+          defaultValue: '4.2'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/pydio/cells/tags
+          validRegex: /.{1,}/
+        - id: $$cap_mysql_version
+          label: MySQL Version
+          defaultValue: '8.0'
+        - id: $$cap_db_root_password
+          label: Database Root Password
+        - id: $$cap_db_password
+          label: Database Password
+    instructions:
+        start: Deploying Pydio file sharing platform.
+        end: Pydio has been deployed! Visit http://$$cap_appname.$$cap_root_domain to complete the installation wizard.
+    displayName: Pydio Cells
+    isOfficial: false
+    description: File sharing and collaboration platform. Modern document management system with advanced sharing and collaboration features.
