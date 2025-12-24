@@ -118,12 +118,27 @@ caprover-one-click-apps/
 ├── scripts/
 │   ├── validate-apps.js    # Validation script
 │   ├── build-one-click-apps.js
-│   └── build-one-click-apps-from-v4.js
+│   ├── build-one-click-apps-from-v4.js
+│   └── diagnose-workflows.js # Workflow diagnostics helper
 ├── package.json
 └── README.md
 ```
 
 ## 🛠️ Development
+
+### GitHub Actions diagnostics
+
+Use the workflow diagnostic helper to flag common CI configuration issues (missing permissions, unpinned actions, or outdated checkout/setup-node versions):
+
+```bash
+npm run diagnose-workflows -- --verbose
+```
+
+For machine-readable output you can add `--json`:
+
+```bash
+npm run diagnose-workflows -- --json
+```
 
 ### App Definition Structure
 
