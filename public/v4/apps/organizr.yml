@@ -1,0 +1,30 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: causefx/organizr:$$cap_organizr_version
+        volumes:
+            - $$cap_appname-config:/config
+        restart: always
+        environment:
+            PUID: 1000
+            PGID: 1000
+            TZ: $$cap_timezone
+        caproverExtra:
+            containerHttpPort: 80
+caproverOneClickApp:
+    variables:
+        - id: $$cap_organizr_version
+          label: Organizr Version
+          defaultValue: 'latest'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/causefx/organizr/tags
+          validRegex: /.{1,}/
+        - id: $$cap_timezone
+          label: Timezone
+          defaultValue: 'UTC'
+          description: Timezone (e.g., America/New_York, Europe/London)
+    instructions:
+        start: Deploying Organizr application organizer.
+        end: Organizr has been deployed! Access it at http://$$cap_appname.$$cap_root_domain and set up your dashboard with all your services.
+    displayName: Organizr
+    isOfficial: false
+    description: Application organizer and dashboard. Bring all your services together in one beautiful, customizable interface with tabs and SSO support.

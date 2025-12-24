@@ -1,0 +1,55 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: yourls:$$cap_yourls_version
+        depends_on:
+            - $$cap_appname-db
+        restart: always
+        environment:
+            YOURLS_DB_HOST: $$cap_appname-db
+            YOURLS_DB_NAME: yourls
+            YOURLS_DB_USER: yourls
+            YOURLS_DB_PASS: $$cap_db_password
+            YOURLS_SITE: http://$$cap_appname.$$cap_root_domain
+            YOURLS_USER: $$cap_admin_user
+            YOURLS_PASS: $$cap_admin_password
+        caproverExtra:
+            containerHttpPort: 80
+    $$cap_appname-db:
+        image: mysql:8
+        volumes:
+            - $$cap_appname-db-data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: $$cap_db_root_password
+            MYSQL_DATABASE: yourls
+            MYSQL_USER: yourls
+            MYSQL_PASSWORD: $$cap_db_password
+        caproverExtra:
+            notExposeAsWebApp: true
+caproverOneClickApp:
+    variables:
+        - id: $$cap_yourls_version
+          label: YOURLS Version
+          defaultValue: '1.9'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/_/yourls/tags
+          validRegex: /.{1,}/
+        - id: $$cap_admin_user
+          label: Admin Username
+          defaultValue: admin
+          description: YOURLS admin username
+        - id: $$cap_admin_password
+          label: Admin Password
+          description: YOURLS admin password
+        - id: $$cap_db_password
+          label: Database Password
+          description: MySQL password
+        - id: $$cap_db_root_password
+          label: Database Root Password
+          description: MySQL root password
+    instructions:
+        start: Deploying YOURLS URL shortener.
+        end: YOURLS has been deployed! Access admin panel at http://$$cap_appname.$$cap_root_domain/admin with your credentials.
+    displayName: YOURLS
+    isOfficial: false
+    description: Your Own URL Shortener. Self-hosted URL shortening service with statistics, API, and plugins support.

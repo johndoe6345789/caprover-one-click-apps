@@ -1,0 +1,30 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: linuxserver/babybuddy:$$cap_babybuddy_version
+        volumes:
+            - $$cap_appname-config:/config
+        restart: always
+        environment:
+            PUID: 1000
+            PGID: 1000
+            TZ: $$cap_timezone
+        caproverExtra:
+            containerHttpPort: 8000
+caproverOneClickApp:
+    variables:
+        - id: $$cap_babybuddy_version
+          label: Baby Buddy Version
+          defaultValue: 'version-v2.4.0'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/linuxserver/babybuddy/tags
+          validRegex: /.{1,}/
+        - id: $$cap_timezone
+          label: Timezone
+          defaultValue: 'UTC'
+          description: Timezone (e.g., America/New_York, Europe/London)
+    instructions:
+        start: Deploying Baby Buddy baby care tracker.
+        end: Baby Buddy has been deployed! Access it at http://$$cap_appname.$$cap_root_domain and create your account to start tracking baby activities.
+    displayName: Baby Buddy
+    isOfficial: false
+    description: Baby care tracker. Help parents track sleep, feedings, diaper changes, and tummy time with data analysis and charts.

@@ -180,7 +180,10 @@ function buildDist() {
             fs.outputJsonSync(path.join(pathOfDistV4, 'list'), v3List);
         })
         .then(function () {
-            return fs.copySync(path.join(pathOfPublic, 'CNAME'), path.join(pathOfDist, 'CNAME'));
+            const cnamePath = path.join(pathOfPublic, 'CNAME');
+            if (fs.existsSync(cnamePath)) {
+                return fs.copySync(cnamePath, path.join(pathOfDist, 'CNAME'));
+            }
         });
 }
 

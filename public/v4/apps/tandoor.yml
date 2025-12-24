@@ -1,0 +1,50 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: vabene1111/recipes:$$cap_tandoor_version
+        volumes:
+            - $$cap_appname-static:/opt/recipes/staticfiles
+            - $$cap_appname-media:/opt/recipes/mediafiles
+        restart: always
+        environment:
+            SECRET_KEY: $$cap_secret_key
+            DB_ENGINE: django.db.backends.postgresql
+            POSTGRES_HOST: $$cap_appname-db
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: tandoor
+            POSTGRES_PASSWORD: $$cap_db_password
+            POSTGRES_DB: tandoor
+        depends_on:
+            - $$cap_appname-db
+        caproverExtra:
+            containerHttpPort: 8080
+    $$cap_appname-db:
+        image: postgres:14
+        volumes:
+            - $$cap_appname-db-data:/var/lib/postgresql/data
+        restart: always
+        environment:
+            POSTGRES_DB: tandoor
+            POSTGRES_USER: tandoor
+            POSTGRES_PASSWORD: $$cap_db_password
+        caproverExtra:
+            notExposeAsWebApp: true
+caproverOneClickApp:
+    variables:
+        - id: $$cap_tandoor_version
+          label: Tandoor Version
+          defaultValue: '1.5.18'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/vabene1111/recipes/tags
+          validRegex: /.{1,}/
+        - id: $$cap_secret_key
+          label: Secret Key
+          description: Django secret key (generate a random string)
+        - id: $$cap_db_password
+          label: Database Password
+          description: PostgreSQL password
+    instructions:
+        start: Deploying Tandoor Recipes application.
+        end: Tandoor Recipes has been deployed! Access it at http://$$cap_appname.$$cap_root_domain and create your admin account.
+    displayName: Tandoor Recipes
+    isOfficial: false
+    description: Recipe manager and meal planner. Organize recipes, plan meals, generate shopping lists, and scale ingredients automatically.

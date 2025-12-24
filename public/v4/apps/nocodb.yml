@@ -1,0 +1,40 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: nocodb/nocodb:$$cap_nocodb_version
+        volumes:
+            - $$cap_appname-data:/usr/app/data
+        restart: always
+        environment:
+            NC_DB: pg://$$cap_appname-db:5432?u=nocodb&p=$$cap_db_password&d=nocodb
+        depends_on:
+            - $$cap_appname-db
+        caproverExtra:
+            containerHttpPort: 8080
+    $$cap_appname-db:
+        image: postgres:14
+        volumes:
+            - $$cap_appname-db-data:/var/lib/postgresql/data
+        restart: always
+        environment:
+            POSTGRES_DB: nocodb
+            POSTGRES_USER: nocodb
+            POSTGRES_PASSWORD: $$cap_db_password
+        caproverExtra:
+            notExposeAsWebApp: true
+caproverOneClickApp:
+    variables:
+        - id: $$cap_nocodb_version
+          label: NocoDB Version
+          defaultValue: '0.202.10'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/nocodb/nocodb/tags
+          validRegex: /.{1,}/
+        - id: $$cap_db_password
+          label: Database Password
+          description: PostgreSQL password for NocoDB
+    instructions:
+        start: Deploying NocoDB - open source Airtable alternative.
+        end: NocoDB has been deployed! Access it at http://$$cap_appname.$$cap_root_domain and create your admin account.
+    displayName: NocoDB
+    isOfficial: false
+    description: Open-source Airtable alternative. Turn any database into a smart spreadsheet with no-code interface.

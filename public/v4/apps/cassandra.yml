@@ -1,0 +1,38 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: cassandra:$$cap_cassandra_version
+        volumes:
+            - $$cap_appname-data:/var/lib/cassandra
+        restart: always
+        environment:
+            CASSANDRA_CLUSTER_NAME: $$cap_cluster_name
+            CASSANDRA_DC: $$cap_datacenter
+            CASSANDRA_RACK: $$cap_rack
+        caproverExtra:
+            notExposeAsWebApp: true
+caproverOneClickApp:
+    variables:
+        - id: $$cap_cassandra_version
+          label: Cassandra Version
+          defaultValue: '4.1'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/_/cassandra/tags
+          validRegex: /.{1,}/
+        - id: $$cap_cluster_name
+          label: Cluster Name
+          defaultValue: 'CapRoverCluster'
+          description: Name of the Cassandra cluster
+        - id: $$cap_datacenter
+          label: Datacenter Name
+          defaultValue: 'dc1'
+          description: Datacenter name for the node
+        - id: $$cap_rack
+          label: Rack Name
+          defaultValue: 'rack1'
+          description: Rack name for the node
+    instructions:
+        start: Deploying Apache Cassandra distributed database.
+        end: Cassandra has been deployed! Connect using CQL on port 9042. Default superuser is cassandra/cassandra (change immediately!).
+    displayName: Apache Cassandra
+    isOfficial: false
+    description: Highly scalable distributed NoSQL database. Designed for handling large amounts of data across commodity servers.

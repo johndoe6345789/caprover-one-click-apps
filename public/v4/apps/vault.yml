@@ -1,0 +1,30 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: hashicorp/vault:$$cap_vault_version
+        volumes:
+            - $$cap_appname-data:/vault/data
+            - $$cap_appname-logs:/vault/logs
+        restart: always
+        environment:
+            VAULT_DEV_ROOT_TOKEN_ID: $$cap_root_token
+            VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+        command: server -dev
+        caproverExtra:
+            containerHttpPort: 8200
+caproverOneClickApp:
+    variables:
+        - id: $$cap_vault_version
+          label: Vault Version
+          defaultValue: '1.15'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/hashicorp/vault/tags
+          validRegex: /.{1,}/
+        - id: $$cap_root_token
+          label: Root Token
+          description: Root token for Vault (generate a secure random string)
+    instructions:
+        start: Deploying HashiCorp Vault secrets management system (DEV MODE - not for production).
+        end: Vault has been deployed! Access UI at http://$$cap_appname.$$cap_root_domain using your root token. ⚠️ This is DEV mode - configure properly for production!
+    displayName: HashiCorp Vault
+    isOfficial: false
+    description: Secrets management and data protection platform. Secure, store, and control access to tokens, passwords, and certificates.

@@ -1,0 +1,50 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: immich-app/immich-server:$$cap_immich_version
+        volumes:
+            - $$cap_appname-upload:/usr/src/app/upload
+        restart: always
+        environment:
+            DB_HOSTNAME: $$cap_appname-db
+            DB_USERNAME: immich
+            DB_PASSWORD: $$cap_db_password
+            DB_DATABASE_NAME: immich
+            REDIS_HOSTNAME: $$cap_appname-redis
+        depends_on:
+            - $$cap_appname-db
+            - $$cap_appname-redis
+        caproverExtra:
+            containerHttpPort: 3001
+    $$cap_appname-db:
+        image: postgres:14
+        volumes:
+            - $$cap_appname-db-data:/var/lib/postgresql/data
+        restart: always
+        environment:
+            POSTGRES_DB: immich
+            POSTGRES_USER: immich
+            POSTGRES_PASSWORD: $$cap_db_password
+        caproverExtra:
+            notExposeAsWebApp: true
+    $$cap_appname-redis:
+        image: redis:7-alpine
+        restart: always
+        caproverExtra:
+            notExposeAsWebApp: true
+caproverOneClickApp:
+    variables:
+        - id: $$cap_immich_version
+          label: Immich Version
+          defaultValue: v1.91.4
+          description: Check out their releases https://github.com/immich-app/immich/releases
+          validRegex: /.{1,}/
+        - id: $$cap_db_password
+          label: Database Password
+          description: PostgreSQL password for Immich
+    instructions:
+        start: Deploying Immich self-hosted photo and video backup solution.
+        end: Immich has been deployed! Access it at http://$$cap_appname.$$cap_root_domain and create your account. Use mobile apps to backup your photos.
+    displayName: Immich
+    isOfficial: false
+    description: Self-hosted photo and video backup solution. Direct alternative to Google Photos with mobile apps and AI features.

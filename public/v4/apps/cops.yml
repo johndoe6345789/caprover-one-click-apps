@@ -1,0 +1,31 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: linuxserver/cops:$$cap_cops_version
+        volumes:
+            - $$cap_appname-config:/config
+            - $$cap_appname-books:/books
+        restart: always
+        environment:
+            PUID: 1000
+            PGID: 1000
+            TZ: $$cap_timezone
+        caproverExtra:
+            containerHttpPort: 80
+caproverOneClickApp:
+    variables:
+        - id: $$cap_cops_version
+          label: COPS Version
+          defaultValue: 'latest'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/linuxserver/cops/tags
+          validRegex: /.{1,}/
+        - id: $$cap_timezone
+          label: Timezone
+          defaultValue: 'UTC'
+          description: Timezone (e.g., America/New_York, Europe/London)
+    instructions:
+        start: Deploying COPS ebook server.
+        end: COPS has been deployed! Access it at http://$$cap_appname.$$cap_root_domain. Add your Calibre library to /books volume.
+    displayName: COPS
+    isOfficial: false
+    description: Calibre OPDS and HTML server. Lightweight PHP server to browse your Calibre ebook library with OPDS catalog support.

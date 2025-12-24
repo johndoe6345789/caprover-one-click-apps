@@ -1,0 +1,26 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: ghost/ghost:$$cap_ghost_version
+        volumes:
+            - $$cap_appname-content:/var/lib/ghost/content
+        restart: always
+        environment:
+            url: http://$$cap_appname.$$cap_root_domain
+            database__client: sqlite3
+            database__connection__filename: /var/lib/ghost/content/data/ghost.db
+        caproverExtra:
+            containerHttpPort: 2368
+caproverOneClickApp:
+    variables:
+        - id: $$cap_ghost_version
+          label: Ghost Version
+          defaultValue: '5.75-alpine'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/ghost/ghost/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Ghost blogging platform (SQLite version).
+        end: Ghost has been deployed! Access it at http://$$cap_appname.$$cap_root_domain/ghost to create your admin account. This uses SQLite for simplicity.
+    displayName: Ghost (SQLite)
+    isOfficial: false
+    description: Professional publishing platform with SQLite. Simpler setup than MySQL version, perfect for small to medium blogs.

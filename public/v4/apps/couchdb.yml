@@ -1,0 +1,32 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: couchdb:$$cap_couchdb_version
+        volumes:
+            - $$cap_appname-data:/opt/couchdb/data
+        restart: always
+        environment:
+            COUCHDB_USER: $$cap_admin_user
+            COUCHDB_PASSWORD: $$cap_admin_password
+        caproverExtra:
+            containerHttpPort: 5984
+caproverOneClickApp:
+    variables:
+        - id: $$cap_couchdb_version
+          label: CouchDB Version
+          defaultValue: '3.3'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/_/couchdb/tags
+          validRegex: /.{1,}/
+        - id: $$cap_admin_user
+          label: Admin Username
+          defaultValue: admin
+          description: Administrator username for CouchDB
+        - id: $$cap_admin_password
+          label: Admin Password
+          description: Administrator password for CouchDB
+    instructions:
+        start: Deploying Apache CouchDB document database.
+        end: CouchDB has been deployed! Access Fauxton UI at http://$$cap_appname.$$cap_root_domain/_utils with your admin credentials.
+    displayName: Apache CouchDB
+    isOfficial: false
+    description: Document-oriented NoSQL database with HTTP API. Sync your data across devices with ease.
