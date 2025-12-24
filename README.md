@@ -128,7 +128,7 @@ caprover-one-click-apps/
 
 ### GitHub Actions diagnostics
 
-Use the workflow diagnostic helper to flag common CI configuration issues (missing permissions, unpinned actions, or outdated checkout/setup-node versions):
+Use the workflow diagnostic helper to flag common CI configuration issues (missing permissions, unpinned actions, or outdated checkout/setup-node versions). The tool also suggests quick fixes that a ChatGPT/Codex agent can surface directly in reviews:
 
 ```bash
 npm run diagnose-workflows -- --verbose
@@ -138,6 +138,12 @@ For machine-readable output you can add `--json`:
 
 ```bash
 npm run diagnose-workflows -- --json
+```
+
+Or generate a markdown-ready report with remediation steps:
+
+```bash
+npm run diagnose-workflows -- --markdown --verbose
 ```
 
 ### App Definition Structure
