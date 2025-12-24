@@ -1,0 +1,50 @@
+name: Pull Request Validation
+
+on:
+    pull_request:
+        branches:
+            - master
+            - main
+
+jobs:
+    validate-pr:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout 🛎️
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js 🔧
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '18'
+                  cache: 'npm'
+
+            - name: Install Dependencies 📦
+              run: npm ci
+
+            - name: Validate Apps 🔎
+              run: npm run validate
+
+            - name: Check Formatting 💅
+              run: npm run formatter
+
+            - name: Check for Modified Files 📝
+              run: |
+                  if [ -n "$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'public/v4/apps/*.yml')" ]; then
+                    echo "Apps modified in this PR:"
+                    git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'public/v4/apps/*.yml'
+                  fi
+
+            - name: Check for Missing Logos 🖼️
+              run: |
+                  for app in public/v4/apps/*.yml; do
+                    appname=$(basename "$app" .yml)
+                    if [ ! -f "public/v4/logos/${appname}.png" ]; then
+                      echo "❌ Missing logo for: $appname"
+                      exit 1
+                    fi
+                  done
+                  echo "✅ All apps have logos"
+
+            - name: Test Build 🏗️
+              run: npm run build
