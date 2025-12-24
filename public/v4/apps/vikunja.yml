@@ -1,0 +1,24 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: vikunja/vikunja:$$cap_vikunja_version
+        volumes:
+            - $$cap_appname-data:/app/vikunja/files
+        restart: always
+        environment:
+            VIKUNJA_SERVICE_PUBLICURL: http://$$cap_appname.$$cap_root_domain
+        caproverExtra:
+            containerHttpPort: 3456
+caproverOneClickApp:
+    variables:
+        - id: $$cap_vikunja_version
+          label: Vikunja Version
+          defaultValue: '0.22'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/vikunja/vikunja/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Vikunja to-do list and task management.
+        end: Vikunja has been deployed! Visit http://$$cap_appname.$$cap_root_domain to create your account and start managing tasks.
+    displayName: Vikunja
+    isOfficial: false
+    description: To-do list and task management. Open-source project management with lists, Gantt charts, and Kanban boards.

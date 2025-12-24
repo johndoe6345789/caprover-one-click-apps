@@ -1,0 +1,25 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: gitea/gitea:$$cap_gitea_version
+        volumes:
+            - $$cap_appname-data:/data
+        restart: always
+        environment:
+            USER_UID: '1000'
+            USER_GID: '1000'
+        caproverExtra:
+            containerHttpPort: 3000
+caproverOneClickApp:
+    variables:
+        - id: $$cap_gitea_version
+          label: Gitea Version
+          defaultValue: '1.21'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/gitea/gitea/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Gitea, a lightweight self-hosted Git service.
+        end: Gitea has been deployed! Visit http://$$cap_appname.$$cap_root_domain to complete the setup.
+    displayName: Gitea
+    isOfficial: false
+    description: A painless self-hosted Git service. Gitea is a lightweight code hosting solution written in Go.

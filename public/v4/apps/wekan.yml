@@ -1,0 +1,34 @@
+captainVersion: 4
+services:
+    $$cap_appname-db:
+        image: mongo:$$cap_mongo_version
+        volumes:
+            - $$cap_appname-db-data:/data/db
+        restart: always
+    $$cap_appname:
+        image: wekanteam/wekan:$$cap_wekan_version
+        restart: always
+        environment:
+            MONGO_URL: mongodb://$$cap_appname-db:27017/wekan
+            ROOT_URL: http://$$cap_appname.$$cap_root_domain
+            PORT: '8080'
+        depends_on:
+            - $$cap_appname-db
+        caproverExtra:
+            containerHttpPort: 8080
+caproverOneClickApp:
+    variables:
+        - id: $$cap_wekan_version
+          label: Wekan Version
+          defaultValue: v7.13
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/wekanteam/wekan/tags
+          validRegex: /.{1,}/
+        - id: $$cap_mongo_version
+          label: MongoDB Version
+          defaultValue: '6.0'
+    instructions:
+        start: Deploying Wekan Kanban board.
+        end: Wekan has been deployed! Visit http://$$cap_appname.$$cap_root_domain to create your account and start organizing tasks.
+    displayName: Wekan
+    isOfficial: false
+    description: Open-source Kanban board. Trello-like task and project management with cards, lists, and boards.

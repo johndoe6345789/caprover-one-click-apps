@@ -1,0 +1,35 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: clickhouse/clickhouse-server:$$cap_clickhouse_version
+        volumes:
+            - $$cap_appname-data:/var/lib/clickhouse
+        restart: always
+        environment:
+            CLICKHOUSE_DB: $$cap_db_name
+            CLICKHOUSE_USER: $$cap_db_user
+            CLICKHOUSE_PASSWORD: $$cap_db_password
+        caproverExtra:
+            containerHttpPort: 8123
+caproverOneClickApp:
+    variables:
+        - id: $$cap_clickhouse_version
+          label: ClickHouse Version
+          defaultValue: '23.12'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/clickhouse/clickhouse-server/tags
+          validRegex: /.{1,}/
+        - id: $$cap_db_name
+          label: Database Name
+          defaultValue: default
+        - id: $$cap_db_user
+          label: Database User
+          defaultValue: default
+        - id: $$cap_db_password
+          label: Database Password
+          description: Database password.
+    instructions:
+        start: Deploying ClickHouse column-oriented database.
+        end: ClickHouse has been deployed! Access the HTTP interface at http://$$cap_appname.$$cap_root_domain.
+    displayName: ClickHouse
+    isOfficial: false
+    description: Column-oriented database management system for online analytical processing. Extremely fast for analytical queries.

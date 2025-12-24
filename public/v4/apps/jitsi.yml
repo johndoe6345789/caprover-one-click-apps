@@ -1,0 +1,31 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: jitsi/web:$$cap_jitsi_version
+        restart: always
+        environment:
+            ENABLE_AUTH: '0'
+            ENABLE_GUESTS: '1'
+            PUBLIC_URL: http://$$cap_appname.$$cap_root_domain
+            XMPP_DOMAIN: meet.jitsi
+            XMPP_SERVER: $$cap_appname-prosody
+            JICOFO_AUTH_USER: focus
+            XMPP_INTERNAL_MUC_DOMAIN: internal-muc.meet.jitsi
+            XMPP_BOSH_URL_BASE: http://$$cap_appname-prosody:5280
+            XMPP_MUC_DOMAIN: muc.meet.jitsi
+            JVB_TCP_HARVESTER_DISABLED: 'true'
+        caproverExtra:
+            containerHttpPort: 80
+caproverOneClickApp:
+    variables:
+        - id: $$cap_jitsi_version
+          label: Jitsi Version
+          defaultValue: stable-8922
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/jitsi/web/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Jitsi video conferencing platform. Note - This is a simplified setup. Full deployment requires additional services.
+        end: Jitsi web component has been deployed! For full functionality, you need to deploy prosody, jicofo, and jvb containers separately.
+    displayName: Jitsi Meet
+    isOfficial: false
+    description: Video conferencing platform. Secure, flexible, and completely free video conferencing with screen sharing and recording.
