@@ -6,7 +6,8 @@
     "formatter": "prettier --check \"./public/**/*.(json|yml)\"",
     "formatter-write": "prettier --write \"./public/**/*.(json|yml)\"",
     "build": "rimraf ./dist && node ./scripts/build-one-click-apps.js && node ./scripts/build-one-click-apps-from-v4.js",
-    "validate": "node ./scripts/validate-apps.js"
+    "validate": "node ./scripts/validate-apps.js",
+    "diagnose-workflows": "node ./scripts/diagnose-workflows.js"
   },
   "repository": {
     "type": "git",
