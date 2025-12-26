@@ -1,0 +1,34 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: chatwoot/chatwoot:$$cap_chatwoot_version
+        volumes:
+            - $$cap_appname-data:/app/storage
+        restart: always
+        environment:
+            REDIS_URL: redis://redis:6379
+            POSTGRES_HOST: postgres
+            POSTGRES_DATABASE: chatwoot
+            POSTGRES_USERNAME: $$cap_db_user
+            POSTGRES_PASSWORD: $$cap_db_pass
+        caproverExtra:
+            containerHttpPort: 3000
+caproverOneClickApp:
+    variables:
+        - id: $$cap_chatwoot_version
+          label: Chatwoot Version
+          defaultValue: v3.6.1
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/chatwoot/chatwoot/tags
+          validRegex: /.{1,}/
+        - id: $$cap_db_user
+          label: Database User
+          defaultValue: chatwoot
+        - id: $$cap_db_pass
+          label: Database Password
+          description: Password for database access
+    instructions:
+        start: Deploying Chatwoot customer engagement platform.
+        end: Chatwoot has been deployed! Visit http://$$cap_appname.$$cap_root_domain to set up your account.
+    displayName: Chatwoot
+    isOfficial: false
+    description: Customer engagement platform. Open-source alternative to Intercom with live chat, email, and social media support.

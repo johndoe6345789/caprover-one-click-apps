@@ -1,0 +1,25 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: kopia/kopia:$$cap_kopia_version
+        volumes:
+            - $$cap_appname-config:/app/config
+            - $$cap_appname-cache:/app/cache
+            - $$cap_appname-logs:/app/logs
+        restart: always
+        command: server start --insecure --address=0.0.0.0:51515
+        caproverExtra:
+            containerHttpPort: 51515
+caproverOneClickApp:
+    variables:
+        - id: $$cap_kopia_version
+          label: Kopia Version
+          defaultValue: '0.15.0'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/kopia/kopia/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Kopia backup solution.
+        end: Kopia has been deployed! Visit http://$$cap_appname.$$cap_root_domain to configure backups.
+    displayName: Kopia
+    isOfficial: false
+    description: Fast and secure backup. Encrypted, deduplicated backups to cloud storage, NAS, or local drives.

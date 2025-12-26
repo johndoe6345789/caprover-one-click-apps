@@ -1,0 +1,41 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: wireguard/wireguard:$$cap_wg_version
+        volumes:
+            - $$cap_appname-config:/config
+        restart: always
+        environment:
+            PUID: '1000'
+            PGID: '1000'
+            TZ: $$cap_timezone
+            SERVERURL: $$cap_server_url
+            PEERS: $$cap_peers
+        cap_add:
+            - NET_ADMIN
+            - SYS_MODULE
+        caproverExtra:
+            containerHttpPort: 51820
+caproverOneClickApp:
+    variables:
+        - id: $$cap_wg_version
+          label: WireGuard Version
+          defaultValue: '1.0.20210914'
+          description: Check out their Docker page for valid tags
+          validRegex: /.{1,}/
+        - id: $$cap_timezone
+          label: Timezone
+          defaultValue: America/New_York
+        - id: $$cap_server_url
+          label: Server URL
+          description: Public URL or IP of your server
+        - id: $$cap_peers
+          label: Number of Peers
+          defaultValue: '3'
+          description: Number of VPN clients to generate
+    instructions:
+        start: Deploying WireGuard VPN server.
+        end: WireGuard has been deployed! Check logs for peer configuration QR codes.
+    displayName: WireGuard
+    isOfficial: false
+    description: Fast, modern VPN. Simple, secure VPN tunnel with state-of-the-art cryptography and minimal configuration.

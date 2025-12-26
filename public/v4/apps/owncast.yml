@@ -1,0 +1,22 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: owncast/owncast:$$cap_owncast_version
+        volumes:
+            - $$cap_appname-data:/app/data
+        restart: always
+        caproverExtra:
+            containerHttpPort: 8080
+caproverOneClickApp:
+    variables:
+        - id: $$cap_owncast_version
+          label: Owncast Version
+          defaultValue: '0.1.2'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/owncast/owncast/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Owncast live streaming server.
+        end: Owncast has been deployed! Visit http://$$cap_appname.$$cap_root_domain to configure your stream.
+    displayName: Owncast
+    isOfficial: false
+    description: Self-hosted live streaming. Run your own live streaming server with chat, analytics, and customization.

@@ -1,0 +1,33 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: huginn/huginn:$$cap_huginn_version
+        volumes:
+            - $$cap_appname-data:/var/lib/mysql
+        restart: always
+        environment:
+            HUGINN_DATABASE_ADAPTER: mysql2
+            HUGINN_DATABASE_NAME: huginn
+            HUGINN_DATABASE_USERNAME: $$cap_db_user
+            HUGINN_DATABASE_PASSWORD: $$cap_db_pass
+        caproverExtra:
+            containerHttpPort: 3000
+caproverOneClickApp:
+    variables:
+        - id: $$cap_huginn_version
+          label: Huginn Version
+          defaultValue: latest-fe
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/huginn/huginn/tags
+          validRegex: /.{1,}/
+        - id: $$cap_db_user
+          label: Database User
+          defaultValue: huginn
+        - id: $$cap_db_pass
+          label: Database Password
+          description: Password for database access
+    instructions:
+        start: Deploying Huginn automation platform.
+        end: Huginn has been deployed! Visit http://$$cap_appname.$$cap_root_domain to create agents and automations.
+    displayName: Huginn
+    isOfficial: false
+    description: Automation platform. Create agents that monitor and act on your behalf. Self-hosted IFTTT alternative.

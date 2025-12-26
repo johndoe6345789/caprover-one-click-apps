@@ -1,0 +1,26 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: apache/airflow:$$cap_airflow_version
+        volumes:
+            - $$cap_appname-dags:/opt/airflow/dags
+            - $$cap_appname-logs:/opt/airflow/logs
+        restart: always
+        environment:
+            AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+            AIRFLOW__CORE__EXECUTOR: LocalExecutor
+        caproverExtra:
+            containerHttpPort: 8080
+caproverOneClickApp:
+    variables:
+        - id: $$cap_airflow_version
+          label: Apache Airflow Version
+          defaultValue: '2.8.1'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/apache/airflow/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Apache Airflow workflow orchestration platform.
+        end: Airflow has been deployed! Visit http://$$cap_appname.$$cap_root_domain to create and manage workflows.
+    displayName: Apache Airflow
+    isOfficial: false
+    description: Workflow orchestration platform. Author, schedule, and monitor workflows as directed acyclic graphs (DAGs).
