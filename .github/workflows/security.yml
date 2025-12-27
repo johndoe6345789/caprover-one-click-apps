@@ -19,17 +19,22 @@ jobs:
             - name: Checkout 🛎️
               uses: actions/checkout@v4
 
+            - name: Setup pnpm 📦
+              uses: pnpm/action-setup@v3
+              with:
+                  version: 7
+
             - name: Setup Node.js 🔧
               uses: actions/setup-node@v4
               with:
                   node-version: '18'
-                  cache: 'npm'
+                  cache: 'pnpm'
 
             - name: Install Dependencies 📦
-              run: npm ci
+              run: pnpm install --frozen-lockfile
 
-            - name: Run npm audit 🔒
-              run: npm audit --audit-level=high
+            - name: Run pnpm audit 🔒
+              run: pnpm audit --audit-level=high
               continue-on-error: true
 
             - name: Check for Vulnerable Docker Images 🐳

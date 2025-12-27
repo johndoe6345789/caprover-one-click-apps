@@ -16,24 +16,29 @@ jobs:
             - name: Checkout 🛎️
               uses: actions/checkout@v4
 
+            - name: Setup pnpm 📦
+              uses: pnpm/action-setup@v3
+              with:
+                  version: 7
+
             - name: Setup Node.js 🔧
               uses: actions/setup-node@v4
               with:
                   node-version: '18'
-                  cache: 'npm'
+                  cache: 'pnpm'
 
             - name: Install Dependencies 📦
-              run: npm ci
+              run: pnpm install --frozen-lockfile
 
             - name: Validate Apps 🔎
-              run: npm run validate
+              run: pnpm run validate
 
             - name: Check Formatting 💅
-              run: npm run formatter
+              run: pnpm run formatter
 
             - name: Build 🏗
               if: ${{ github.event_name == 'push' }}
-              run: npm run build
+              run: pnpm run build
 
             - name: Deploy 🚀
               if: ${{ github.event_name == 'push' }}
