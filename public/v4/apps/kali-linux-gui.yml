@@ -34,8 +34,7 @@ caproverOneClickApp:
             This will deploy a Kali Linux container with GUI and remote desktop
             support. A lightweight Flask web UI is also included to display
             server statistics.
-        end:
-            Kali Linux is deployed and accessible via RDP. Use a Remote Desktop
+        end: Kali Linux is deployed and accessible via RDP. Use a Remote Desktop
             client to connect using the IP address/domain name and the RDP port
             specified during deployment. The server stats web UI is available
             on the CapRover-assigned URL.

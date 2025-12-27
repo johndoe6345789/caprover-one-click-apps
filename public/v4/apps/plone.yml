@@ -1,0 +1,22 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: plone/plone:$$cap_plone_version
+        volumes:
+            - $$cap_appname-data:/data
+        restart: always
+        caproverExtra:
+            containerHttpPort: 8080
+caproverOneClickApp:
+    variables:
+        - id: $$cap_plone_version
+          label: Plone Version
+          defaultValue: '6.0.8'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/plone/plone/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Plone enterprise CMS.
+        end: Plone has been deployed! Visit http://$$cap_appname.$$cap_root_domain to access your CMS.
+    displayName: Plone
+    isOfficial: false
+    description: Enterprise-ready CMS. Secure, scalable content management with powerful features for organizations and businesses.

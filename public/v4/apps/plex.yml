@@ -1,0 +1,31 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: linuxserver/plex:$$cap_plex_version
+        volumes:
+            - $$cap_appname-config:/config
+            - $$cap_appname-media:/media
+        restart: always
+        environment:
+            PUID: '1000'
+            PGID: '1000'
+            TZ: $$cap_timezone
+            VERSION: docker
+        caproverExtra:
+            containerHttpPort: 32400
+caproverOneClickApp:
+    variables:
+        - id: $$cap_plex_version
+          label: Plex Version
+          defaultValue: '1.40.0'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/linuxserver/plex/tags
+          validRegex: /.{1,}/
+        - id: $$cap_timezone
+          label: Timezone
+          defaultValue: America/New_York
+    instructions:
+        start: Deploying Plex Media Server.
+        end: Plex has been deployed! Visit http://$$cap_appname.$$cap_root_domain to complete setup and add your media.
+    displayName: Plex Media Server
+    isOfficial: false
+    description: Media streaming server. Organize and stream your personal media collection to any device with rich metadata.

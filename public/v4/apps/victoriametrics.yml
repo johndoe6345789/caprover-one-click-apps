@@ -1,0 +1,22 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: victoriametrics/victoria-metrics:$$cap_vm_version
+        volumes:
+            - $$cap_appname-data:/victoria-metrics-data
+        restart: always
+        caproverExtra:
+            containerHttpPort: 8428
+caproverOneClickApp:
+    variables:
+        - id: $$cap_vm_version
+          label: VictoriaMetrics Version
+          defaultValue: v1.96.0
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/victoriametrics/victoria-metrics/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying VictoriaMetrics time-series database.
+        end: VictoriaMetrics has been deployed! Visit http://$$cap_appname.$$cap_root_domain for the UI.
+    displayName: VictoriaMetrics
+    isOfficial: false
+    description: Fast, cost-effective time-series database. Drop-in replacement for Prometheus with better performance and storage.

@@ -1,0 +1,31 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: linuxserver/sonarr:$$cap_sonarr_version
+        volumes:
+            - $$cap_appname-config:/config
+            - $$cap_appname-tv:/tv
+            - $$cap_appname-downloads:/downloads
+        restart: always
+        environment:
+            PUID: '1000'
+            PGID: '1000'
+            TZ: $$cap_timezone
+        caproverExtra:
+            containerHttpPort: 8989
+caproverOneClickApp:
+    variables:
+        - id: $$cap_sonarr_version
+          label: Sonarr Version
+          defaultValue: '4.0.0'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/linuxserver/sonarr/tags
+          validRegex: /.{1,}/
+        - id: $$cap_timezone
+          label: Timezone
+          defaultValue: America/New_York
+    instructions:
+        start: Deploying Sonarr TV show manager.
+        end: Sonarr has been deployed! Visit http://$$cap_appname.$$cap_root_domain to configure your TV library.
+    displayName: Sonarr
+    isOfficial: false
+    description: TV show manager. Automatically download, organize, and manage your TV series with smart episode tracking.

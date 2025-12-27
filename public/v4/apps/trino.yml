@@ -1,0 +1,22 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: trinodb/trino:$$cap_trino_version
+        volumes:
+            - $$cap_appname-data:/data/trino
+        restart: always
+        caproverExtra:
+            containerHttpPort: 8080
+caproverOneClickApp:
+    variables:
+        - id: $$cap_trino_version
+          label: Trino Version
+          defaultValue: '436'
+          description: Check out their Docker page for the valid tags https://hub.docker.com/r/trinodb/trino/tags
+          validRegex: /.{1,}/
+    instructions:
+        start: Deploying Trino distributed SQL query engine.
+        end: Trino has been deployed! Visit http://$$cap_appname.$$cap_root_domain for the web UI. Query on port 8080.
+    displayName: Trino
+    isOfficial: false
+    description: Fast distributed SQL query engine. Query data anywhere from object storage to databases with ANSI SQL support.
